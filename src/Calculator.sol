@@ -7,7 +7,7 @@ contract Calculator {
     uint256 public result;
 
     event Addition(uint256 numA, uint256 numB, uint256 result_);
-    event Substraction(uint256 numA, uint256 numB, uint256 result_);
+    event Subtraction(uint256 numA, uint256 numB, uint256 result_);
     event Multiplication(uint256 numA, uint256 numB, uint256 result_);
     event Division(uint256 numA, uint256 numB, uint256 result_);
 
@@ -22,11 +22,11 @@ contract Calculator {
         emit Addition(numA, numB, result_);
     }
 
-    function substract(uint256 numA, uint256 numB) external returns (uint256 result_) {
+    function subtract(uint256 numA, uint256 numB) external returns (uint256 result_) {
         result_ = numA - numB;
         result = result_;
 
-        emit Substraction(numA, numB, result_);
+        emit Subtraction(numA, numB, result_);
     }
 
     function multiply(uint256 numA, uint256 numB) external returns (uint256 result_) {

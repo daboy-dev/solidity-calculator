@@ -26,12 +26,12 @@ contract CalculatorTest is Test {
         assertEq(calculator.result(), 82);
     }
 
-    function testSubstract() public {
+    function testSubtract() public {
         uint256 numA = 21;
         uint256 numB = 4;
-        uint256 substractResult = calculator.substract(numA, numB);
+        uint256 subtractResult = calculator.subtract(numA, numB);
 
-        assertEq(substractResult, 17);
+        assertEq(subtractResult, 17);
         assertEq(calculator.result(), 17);
     }
 
@@ -72,9 +72,9 @@ contract CalculatorTest is Test {
         calculator.add(type(uint256).max, 5);
     }
 
-    function testSubstractUnderflowReverts() public {
+    function testSubtractUnderflowReverts() public {
         vm.expectRevert();
-        calculator.substract(1, 2);
+        calculator.subtract(1, 2);
     }
 
     function testMultiplyOverflowReverts() public {
@@ -91,13 +91,13 @@ contract CalculatorTest is Test {
         calculator.add(7, 3);
     }
 
-    event Substraction(uint256 numA, uint256 numB, uint256 result_);
+    event Subtraction(uint256 numA, uint256 numB, uint256 result_);
 
     function testSubtractEmitsEvents() public {
         vm.expectEmit(false, false, false, true);
 
-        emit Substraction(25, 5, 20);
-        calculator.substract(25, 5);
+        emit Subtraction(25, 5, 20);
+        calculator.subtract(25, 5);
     }
 
     event Multiplication(uint256 numA, uint256 numB, uint256 result_);

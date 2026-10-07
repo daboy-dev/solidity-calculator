@@ -2,7 +2,7 @@
 pragma solidity ^0.8.34;
 
 import {Test} from "forge-std/Test.sol";
-import {Calculator} from "../src/Calculator.sol";
+import {Calculator, DivisionByZero} from "../src/Calculator.sol";
 
 contract CalculatorTest is Test {
     Calculator calculator;
@@ -18,35 +18,39 @@ contract CalculatorTest is Test {
     }
 
     function testAdd() public {
-        uint256 numA = 5;
-        uint256 numB = 5;
+        uint256 numA = 1;
+        uint256 numB = 81;
         uint256 addResult = calculator.add(numA, numB);
 
-        assert(addResult == numA + numB);
+        assertEq(addResult, 82);
+        assertEq(calculator.result(), 82);
     }
 
     function testSubstract() public {
-        uint256 numA = 5;
-        uint256 numB = 5;
-        uint256 addResult = calculator.substract(numA, numB);
+        uint256 numA = 21;
+        uint256 numB = 4;
+        uint256 substractResult = calculator.substract(numA, numB);
 
-        assert(addResult == numA - numB);
+        assertEq(substractResult, 17);
+        assertEq(calculator.result(), 17);
     }
 
     function testMultiply() public {
-        uint256 numA = 5;
-        uint256 numB = 5;
-        uint256 addResult = calculator.multiply(numA, numB);
+        uint256 numA = 51;
+        uint256 numB = 6;
+        uint256 multiplyResult = calculator.multiply(numA, numB);
 
-        assert(addResult == numA * numB);
+        assertEq(multiplyResult, 306);
+        assertEq(calculator.result(), 306);
     }
 
     function testDivide() public {
-        uint256 numA = 5;
-        uint256 numB = 5;
-        uint256 addResult = calculator.divide(numA, numB);
+        uint256 numA = 20;
+        uint256 numB = 4;
+        uint256 divideResult = calculator.divide(numA, numB);
 
-        assert(addResult == numA / numB);
+        assertEq(divideResult, 5);
+        assertEq(calculator.result(), 5);
     }
 
     function testCanNotMultiplyLargeNumbers() public {
@@ -57,7 +61,12 @@ contract CalculatorTest is Test {
         calculator.multiply(numA, numB);
     }
 
-    function testDivideRandomNumbers(uint256 numA, uint256 numB) public {
-        calculator.divide(numA, numB);
+    function testFuzzDivide(uint256 numA, uint256 numB) public {
+        vm.assume(numB != 0);
+
+        uint256 res = calculator.divide(numA, numB);
+
+        assertEq(res, numA / numB);
+        assertEq(calculator.result(), res);
     }
 }

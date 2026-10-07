@@ -15,7 +15,7 @@ contract Calculator {
         result = firstResult_;
     }
 
-    function add(uint256 numA, uint256 numB) external returns(uint256 result_) {
+    function add(uint256 numA, uint256 numB) external returns (uint256 result_) {
         result_ = numA + numB;
         result = result_;
 

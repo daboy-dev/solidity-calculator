@@ -6,7 +6,7 @@ import {Calculator, DivisionByZero} from "../src/Calculator.sol";
 
 contract CalculatorTest is Test {
     Calculator calculator;
-    uint256 firstResult = 0;
+    uint256 firstResult = 17;
 
     function setUp() public {
         calculator = new Calculator(firstResult);
@@ -14,7 +14,7 @@ contract CalculatorTest is Test {
 
     function testCheckFirstResult() public view {
         uint256 calculatorResult = calculator.result();
-        assert(firstResult == calculatorResult);
+        assertEq(firstResult, calculatorResult);
     }
 
     function testAdd() public {
@@ -80,5 +80,41 @@ contract CalculatorTest is Test {
     function testMultiplyOverflowReverts() public {
         vm.expectRevert();
         calculator.multiply(type(uint256).max, 2);
+    }
+
+    event Addition(uint256 numA, uint256 numB, uint256 result_);
+
+    function testAddEmitsEvents() public {
+        vm.expectEmit(false, false, false, true);
+
+        emit Addition(7, 3, 10);
+        calculator.add(7, 3);
+    }
+
+    event Substraction(uint256 numA, uint256 numB, uint256 result_);
+
+    function testSubtractEmitsEvents() public {
+        vm.expectEmit(false, false, false, true);
+
+        emit Substraction(25, 5, 20);
+        calculator.substract(25, 5);
+    }
+
+    event Multiplication(uint256 numA, uint256 numB, uint256 result_);
+
+    function testMultiplyEmitsEvents() public {
+        vm.expectEmit(false, false, false, true);
+
+        emit Multiplication(5, 2, 10);
+        calculator.multiply(5, 2);
+    }
+
+    event Division(uint256 numA, uint256 numB, uint256 result_);
+
+    function testDivideEmitsEvents() public {
+        vm.expectEmit(false, false, false, true);
+
+        emit Division(35, 5, 7);
+        calculator.divide(35, 5);
     }
 }

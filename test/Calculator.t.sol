@@ -53,20 +53,32 @@ contract CalculatorTest is Test {
         assertEq(calculator.result(), 5);
     }
 
-    function testCanNotMultiplyLargeNumbers() public {
-        uint256 numA = 115792089237316195423570985008687907853269984665640564039457584007913129639935;
-        uint256 numB = 2;
-
-        vm.expectRevert();
-        calculator.multiply(numA, numB);
-    }
-
     function testFuzzDivide(uint256 numA, uint256 numB) public {
         vm.assume(numB != 0);
 
-        uint256 res = calculator.divide(numA, numB);
+        uint256 divideResult = calculator.divide(numA, numB);
 
-        assertEq(res, numA / numB);
-        assertEq(calculator.result(), res);
+        assertEq(divideResult, numA / numB);
+        assertEq(calculator.result(), divideResult);
+    }
+
+    function testFuzzDivideByZeroReverts(uint256 numA) public {
+        vm.expectRevert(abi.encodeWithSelector(DivisionByZero.selector, numA, 0));
+        calculator.divide(numA, 0);
+    }
+
+    function testAddOverflowReverts() public {
+        vm.expectRevert();
+        calculator.add(type(uint256).max, 5);
+    }
+
+    function testSubstractUnderflowReverts() public {
+        vm.expectRevert();
+        calculator.substract(1, 2);
+    }
+
+    function testMultiplyOverflowReverts() public {
+        vm.expectRevert();
+        calculator.multiply(type(uint256).max, 2);
     }
 }
